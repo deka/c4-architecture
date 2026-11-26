@@ -1,0 +1,869 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "C4 workspace",
+  "description": "C4 model (context, container and component levels) and its views. Derived from the Structurizr DSL. A file included via `include` uses the same schema.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "version"
+  ],
+  "properties": {
+    "$schema": {
+      "type": "string",
+      "description": "Path or URL of this JSON Schema, for editor support. Ignored by the runtime."
+    },
+    "version": {
+      "description": "Format version.",
+      "const": 1
+    },
+    "name": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Workspace name, used as the page title."
+    },
+    "description": {
+      "type": "string",
+      "description": "Workspace description, shown under the page title."
+    },
+    "include": {
+      "description": "Files merged into this workspace. Paths are relative to the current file; remote URLs are not allowed.",
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/relativePath"
+      }
+    },
+    "model": {
+      "$ref": "#/$defs/model",
+      "description": "The elements and their relationships."
+    },
+    "views": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/view"
+      },
+      "description": "Diagrams to render, in page order."
+    },
+    "styles": {
+      "$ref": "#/$defs/styles",
+      "description": "Element and relationship styles, matched by tag."
+    }
+  },
+  "$defs": {
+    "id": {
+      "description": "Identifier unique across the whole workspace (included files too).",
+      "type": "string",
+      "pattern": "^[A-Za-z][A-Za-z0-9_-]*$"
+    },
+    "relativePath": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "^(?![A-Za-z][A-Za-z0-9+.-]*://)(?!/).+$",
+      "description": "Path relative to the declaring file. Absolute paths and URLs are not allowed."
+    },
+    "color": {
+      "type": "string",
+      "pattern": "^#[0-9A-Fa-f]{6}$",
+      "description": "Colour in `#RRGGBB` hexadecimal notation."
+    },
+    "tags": {
+      "description": "User tags. Default tags (Element, Person, Software System, Container, Component, Relationship) are implicit.",
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "uniqueItems": true
+    },
+    "properties": {
+      "description": "Free-form metadata, not rendered.",
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "name",
+          "value"
+        ],
+        "properties": {
+          "name": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Property name."
+          },
+          "value": {
+            "type": "string",
+            "description": "Property value."
+          }
+        }
+      }
+    },
+    "model": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "impliedRelationships": {
+          "description": "Derive relationships between parents from relationships between their children (Structurizr default behaviour).",
+          "type": "boolean",
+          "default": true
+        },
+        "people": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/person"
+          },
+          "description": "People: the users or roles that interact with the software systems."
+        },
+        "softwareSystems": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/softwareSystem"
+          },
+          "description": "Software systems, internal or external, with their containers."
+        },
+        "relationships": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/relationship"
+          },
+          "description": "Every relationship of the model, between any two elements."
+        }
+      }
+    },
+    "person": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "name"
+      ],
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/id",
+          "description": "Identifier referenced by relationships, views and steps. Unique across the whole workspace."
+        },
+        "name": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Name shown on the diagram."
+        },
+        "description": {
+          "type": "string",
+          "description": "Who this person or role is, shown on the diagram."
+        },
+        "external": {
+          "type": "boolean",
+          "default": false,
+          "description": "Element outside the organisation or team scope (rendered grey, per C4 notation)."
+        },
+        "group": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Name of a group. Elements sharing a group are drawn inside a dashed frame."
+        },
+        "tags": {
+          "$ref": "#/$defs/tags"
+        },
+        "url": {
+          "description": "Link opened when the element is clicked. http and https only.",
+          "type": "string",
+          "format": "uri",
+          "pattern": "^https?://"
+        },
+        "properties": {
+          "$ref": "#/$defs/properties"
+        }
+      }
+    },
+    "softwareSystem": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "name"
+      ],
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/id",
+          "description": "Identifier referenced by relationships, views and steps. Unique across the whole workspace."
+        },
+        "name": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Name shown on the diagram."
+        },
+        "description": {
+          "type": "string",
+          "description": "What the system does, shown on the diagram."
+        },
+        "external": {
+          "type": "boolean",
+          "default": false,
+          "description": "Element outside the organisation or team scope (rendered grey, per C4 notation)."
+        },
+        "group": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Name of a group. Elements sharing a group are drawn inside a dashed frame."
+        },
+        "tags": {
+          "$ref": "#/$defs/tags"
+        },
+        "url": {
+          "description": "Link opened when the element is clicked. http and https only.",
+          "type": "string",
+          "format": "uri",
+          "pattern": "^https?://"
+        },
+        "properties": {
+          "$ref": "#/$defs/properties"
+        },
+        "containers": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/container"
+          },
+          "description": "Containers of the system (C4 level 2)."
+        }
+      }
+    },
+    "container": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "name"
+      ],
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/id",
+          "description": "Identifier referenced by relationships, views and steps. Unique across the whole workspace."
+        },
+        "name": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Name shown on the diagram."
+        },
+        "description": {
+          "type": "string",
+          "description": "Responsibility of the container, shown on the diagram."
+        },
+        "technology": {
+          "type": "string",
+          "description": "Main technology choice (e.g. \"Go\", \"React\", \"PostgreSQL 16\"), shown under the name."
+        },
+        "group": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Name of a group. Elements sharing a group are drawn inside a dashed frame."
+        },
+        "tags": {
+          "$ref": "#/$defs/tags"
+        },
+        "url": {
+          "description": "Link opened when the element is clicked. http and https only.",
+          "type": "string",
+          "format": "uri",
+          "pattern": "^https?://"
+        },
+        "properties": {
+          "$ref": "#/$defs/properties"
+        },
+        "components": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/component"
+          },
+          "description": "Components of the container (C4 level 3)."
+        }
+      }
+    },
+    "component": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "name"
+      ],
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/id",
+          "description": "Identifier referenced by relationships, views and steps. Unique across the whole workspace."
+        },
+        "name": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Name shown on the diagram."
+        },
+        "description": {
+          "type": "string",
+          "description": "Responsibility of the component, shown on the diagram."
+        },
+        "technology": {
+          "type": "string",
+          "description": "Main technology choice (e.g. \"Go\", \"React\", \"PostgreSQL 16\"), shown under the name."
+        },
+        "group": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Name of a group. Elements sharing a group are drawn inside a dashed frame."
+        },
+        "tags": {
+          "$ref": "#/$defs/tags"
+        },
+        "url": {
+          "description": "Link opened when the element is clicked. http and https only.",
+          "type": "string",
+          "format": "uri",
+          "pattern": "^https?://"
+        },
+        "properties": {
+          "$ref": "#/$defs/properties"
+        }
+      }
+    },
+    "relationship": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "from",
+        "to"
+      ],
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/id",
+          "description": "Optional. Only needed to target the relationship in include/exclude."
+        },
+        "from": {
+          "$ref": "#/$defs/id",
+          "description": "Id of the source element: the one that initiates the interaction."
+        },
+        "to": {
+          "$ref": "#/$defs/id",
+          "description": "Id of the destination element."
+        },
+        "description": {
+          "type": "string",
+          "description": "What the source does with the destination, as a verb phrase (e.g. \"Places orders using\")."
+        },
+        "technology": {
+          "type": "string",
+          "description": "Protocol and format (e.g. \"HTTPS/JSON\", \"gRPC\", \"SQL\")."
+        },
+        "tags": {
+          "$ref": "#/$defs/tags"
+        },
+        "url": {
+          "description": "Link opened when the relationship is clicked. http and https only.",
+          "type": "string",
+          "format": "uri",
+          "pattern": "^https?://"
+        },
+        "properties": {
+          "$ref": "#/$defs/properties"
+        }
+      }
+    },
+    "selector": {
+      "description": "\"*\" = default selection for the view type; an id = one element; {tag} = every element with that tag; {relationship} = one relationship by id.",
+      "anyOf": [
+        {
+          "const": "*"
+        },
+        {
+          "$ref": "#/$defs/id"
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "tag"
+          ],
+          "properties": {
+            "tag": {
+              "type": "string",
+              "minLength": 1,
+              "description": "Every element with this tag. In `exclude`, relationships with this tag are removed too."
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "relationship"
+          ],
+          "properties": {
+            "relationship": {
+              "$ref": "#/$defs/id",
+              "description": "A relationship by id. In `include`, adds both of its ends; in `exclude`, removes the relationship."
+            }
+          }
+        }
+      ]
+    },
+    "layout": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "direction": {
+          "enum": [
+            "TB",
+            "BT",
+            "LR",
+            "RL"
+          ],
+          "default": "TB",
+          "description": "Rank direction: `TB` top to bottom, `BT` bottom to top, `LR` left to right, `RL` right to left."
+        },
+        "rankSeparation": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "Space between ranks, in pixels (default 64)."
+        },
+        "nodeSeparation": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "Space between elements of the same rank, in pixels (default 48)."
+        }
+      },
+      "description": "Automatic layout options."
+    },
+    "view": {
+      "oneOf": [
+        {
+          "description": "Landscape: every person and software system, with no central system.",
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "type",
+            "key"
+          ],
+          "properties": {
+            "type": {
+              "const": "systemLandscape",
+              "description": "View type."
+            },
+            "key": {
+              "$ref": "#/$defs/id",
+              "description": "Unique view identifier (used as the HTML anchor)."
+            },
+            "title": {
+              "type": "string",
+              "description": "Title shown above the diagram and in the page navigation. Defaults to the key."
+            },
+            "description": {
+              "type": "string",
+              "description": "Text shown under the title."
+            },
+            "include": {
+              "description": "Defaults to [\"*\"].",
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/selector"
+              }
+            },
+            "exclude": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/selector"
+              },
+              "description": "Selectors removed from the selection. Removing an element also removes its relationships."
+            },
+            "layout": {
+              "$ref": "#/$defs/layout",
+              "description": "Automatic layout options."
+            }
+          }
+        },
+        {
+          "description": "Level 1: a software system and its direct surroundings.",
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "type",
+            "key",
+            "scope"
+          ],
+          "properties": {
+            "type": {
+              "const": "systemContext",
+              "description": "View type."
+            },
+            "key": {
+              "$ref": "#/$defs/id",
+              "description": "Unique view identifier (used as the HTML anchor)."
+            },
+            "scope": {
+              "$ref": "#/$defs/id",
+              "description": "Id of a softwareSystem."
+            },
+            "title": {
+              "type": "string",
+              "description": "Title shown above the diagram and in the page navigation. Defaults to the key."
+            },
+            "description": {
+              "type": "string",
+              "description": "Text shown under the title."
+            },
+            "include": {
+              "description": "Defaults to [\"*\"].",
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/selector"
+              }
+            },
+            "exclude": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/selector"
+              },
+              "description": "Selectors removed from the selection. Removing an element also removes its relationships."
+            },
+            "layout": {
+              "$ref": "#/$defs/layout",
+              "description": "Automatic layout options."
+            }
+          }
+        },
+        {
+          "description": "Level 2: the containers of a software system.",
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "type",
+            "key",
+            "scope"
+          ],
+          "properties": {
+            "type": {
+              "const": "container",
+              "description": "View type."
+            },
+            "key": {
+              "$ref": "#/$defs/id",
+              "description": "Unique view identifier (used as the HTML anchor)."
+            },
+            "scope": {
+              "$ref": "#/$defs/id",
+              "description": "Id of a softwareSystem."
+            },
+            "title": {
+              "type": "string",
+              "description": "Title shown above the diagram and in the page navigation. Defaults to the key."
+            },
+            "description": {
+              "type": "string",
+              "description": "Text shown under the title."
+            },
+            "include": {
+              "description": "Defaults to [\"*\"].",
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/selector"
+              }
+            },
+            "exclude": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/selector"
+              },
+              "description": "Selectors removed from the selection. Removing an element also removes its relationships."
+            },
+            "layout": {
+              "$ref": "#/$defs/layout",
+              "description": "Automatic layout options."
+            }
+          }
+        },
+        {
+          "description": "Level 3: the components of a container.",
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "type",
+            "key",
+            "scope"
+          ],
+          "properties": {
+            "type": {
+              "const": "component",
+              "description": "View type."
+            },
+            "key": {
+              "$ref": "#/$defs/id",
+              "description": "Unique view identifier (used as the HTML anchor)."
+            },
+            "scope": {
+              "$ref": "#/$defs/id",
+              "description": "Id of a container."
+            },
+            "title": {
+              "type": "string",
+              "description": "Title shown above the diagram and in the page navigation. Defaults to the key."
+            },
+            "description": {
+              "type": "string",
+              "description": "Text shown under the title."
+            },
+            "include": {
+              "description": "Defaults to [\"*\"].",
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/selector"
+              }
+            },
+            "exclude": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/selector"
+              },
+              "description": "Selectors removed from the selection. Removing an element also removes its relationships."
+            },
+            "layout": {
+              "$ref": "#/$defs/layout",
+              "description": "Automatic layout options."
+            }
+          }
+        },
+        {
+          "description": "Dynamic: a numbered sequence of interactions, each step being an instance of a relationship of the model (declared or implied).",
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "type",
+            "key",
+            "steps"
+          ],
+          "properties": {
+            "type": {
+              "const": "dynamic",
+              "description": "View type."
+            },
+            "key": {
+              "$ref": "#/$defs/id",
+              "description": "Unique view identifier (used as the HTML anchor)."
+            },
+            "scope": {
+              "$ref": "#/$defs/id",
+              "description": "Id of a softwareSystem (steps between containers) or a container (steps between components). Omit it for steps between people and software systems."
+            },
+            "title": {
+              "type": "string",
+              "description": "Title shown above the diagram and in the page navigation. Defaults to the key."
+            },
+            "description": {
+              "type": "string",
+              "description": "Text shown under the title."
+            },
+            "steps": {
+              "type": "array",
+              "minItems": 1,
+              "description": "Steps, numbered from 1 in array order.",
+              "items": {
+                "$ref": "#/$defs/dynamicStep"
+              }
+            },
+            "layout": {
+              "$ref": "#/$defs/layout",
+              "description": "Automatic layout options."
+            }
+          }
+        }
+      ]
+    },
+    "styles": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "elements": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/elementStyle"
+          },
+          "description": "Element styles. An element takes the styles of its tags, in tag order; later ones win, property by property."
+        },
+        "relationships": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/relationshipStyle"
+          },
+          "description": "Relationship styles, applied like element styles."
+        }
+      }
+    },
+    "elementStyle": {
+      "description": "Style applied to elements with the tag. No shadows: no property allows them.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "tag"
+      ],
+      "properties": {
+        "tag": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Tag the style applies to. Default tags (Element, Person, Software System, Container, Component) work too."
+        },
+        "shape": {
+          "enum": [
+            "box",
+            "roundedBox",
+            "person",
+            "cylinder",
+            "pipe",
+            "component",
+            "webBrowser",
+            "mobileDevicePortrait",
+            "folder"
+          ],
+          "description": "Shape of the element. Default: `person` for people, `roundedBox` otherwise."
+        },
+        "icon": {
+          "description": "Embedded image only (data URI), to stay self-contained.",
+          "type": "string",
+          "pattern": "^data:image/(png|jpeg|svg\\+xml);base64,[A-Za-z0-9+/=]+$"
+        },
+        "width": {
+          "type": "integer",
+          "minimum": 1,
+          "description": "Width in pixels (default 240)."
+        },
+        "height": {
+          "type": "integer",
+          "minimum": 1,
+          "description": "Minimum height in pixels (default 120). The box grows to fit its text."
+        },
+        "background": {
+          "$ref": "#/$defs/color",
+          "description": "Fill colour. Default: C4 blue by level, grey for external elements."
+        },
+        "color": {
+          "$ref": "#/$defs/color",
+          "description": "Text colour."
+        },
+        "stroke": {
+          "$ref": "#/$defs/color",
+          "description": "Border colour."
+        },
+        "strokeWidth": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 10,
+          "description": "Border width in pixels (default 1)."
+        },
+        "border": {
+          "enum": [
+            "solid",
+            "dashed",
+            "dotted"
+          ],
+          "description": "Border line style (default `solid`)."
+        },
+        "opacity": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 100,
+          "description": "Opacity in % (default 100)."
+        },
+        "fontSize": {
+          "type": "integer",
+          "minimum": 1,
+          "description": "Font size of the name, in pixels (default 14). Metadata and description are slightly smaller."
+        },
+        "metadata": {
+          "type": "boolean",
+          "description": "Show the element type and technology (default true)."
+        },
+        "description": {
+          "type": "boolean",
+          "description": "Show the description (default true)."
+        }
+      }
+    },
+    "relationshipStyle": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "tag"
+      ],
+      "properties": {
+        "tag": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Tag the style applies to. The default tag `Relationship` works too."
+        },
+        "color": {
+          "$ref": "#/$defs/color",
+          "description": "Colour of the line and its label."
+        },
+        "thickness": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 10,
+          "description": "Line width in pixels."
+        },
+        "style": {
+          "enum": [
+            "solid",
+            "dashed",
+            "dotted"
+          ],
+          "description": "Line style (default `solid`)."
+        },
+        "routing": {
+          "enum": [
+            "direct",
+            "orthogonal",
+            "curved"
+          ],
+          "description": "`orthogonal` (default): right angles with rounded corners; `curved`: fully rounded corners; `direct`: straight line."
+        },
+        "fontSize": {
+          "type": "integer",
+          "minimum": 1,
+          "description": "Font size of the label, in pixels (default 11)."
+        },
+        "width": {
+          "type": "integer",
+          "minimum": 1,
+          "description": "Maximum label width, in pixels (default 160)."
+        },
+        "position": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 100,
+          "description": "Label position along the line, in % from the source (default 50)."
+        },
+        "opacity": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 100,
+          "description": "Opacity in % (default 100)."
+        }
+      }
+    },
+    "dynamicStep": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "from",
+        "to"
+      ],
+      "description": "One interaction. A relationship from `from` to `to` must exist in the model.",
+      "properties": {
+        "from": {
+          "$ref": "#/$defs/id",
+          "description": "Id of the source element."
+        },
+        "to": {
+          "$ref": "#/$defs/id",
+          "description": "Id of the destination element."
+        },
+        "description": {
+          "type": "string",
+          "description": "What happens at this step. Defaults to the description of the relationship; also selects the relationship when several link the same elements."
+        }
+      }
+    }
+  }
+}

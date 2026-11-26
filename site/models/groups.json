@@ -1,0 +1,82 @@
+{
+  "$schema": "../../schema/c4.schema.json",
+  "version": 1,
+  "name": "Groups",
+  "model": {
+    "softwareSystems": [
+      {
+        "id": "store",
+        "name": "Store",
+        "description": "Online store",
+        "containers": [
+          {
+            "id": "web",
+            "name": "Web shop",
+            "description": "Storefront",
+            "technology": "React",
+            "group": "Front end"
+          },
+          {
+            "id": "mobile",
+            "name": "Mobile app",
+            "description": "iOS and Android",
+            "technology": "Flutter",
+            "group": "Front end"
+          },
+          {
+            "id": "api",
+            "name": "API",
+            "description": "Business logic",
+            "technology": "Java",
+            "group": "Back end"
+          },
+          {
+            "id": "db",
+            "name": "Database",
+            "description": "Products and orders",
+            "technology": "PostgreSQL",
+            "group": "Back end",
+            "tags": [
+              "Database"
+            ]
+          }
+        ]
+      }
+    ],
+    "relationships": [
+      {
+        "from": "web",
+        "to": "api",
+        "description": "Calls",
+        "technology": "HTTPS/JSON"
+      },
+      {
+        "from": "mobile",
+        "to": "api",
+        "description": "Calls",
+        "technology": "HTTPS/JSON"
+      },
+      {
+        "from": "api",
+        "to": "db",
+        "description": "Reads and writes",
+        "technology": "SQL"
+      }
+    ]
+  },
+  "views": [
+    {
+      "type": "container",
+      "key": "groups",
+      "scope": "store"
+    }
+  ],
+  "styles": {
+    "elements": [
+      {
+        "tag": "Database",
+        "shape": "cylinder"
+      }
+    ]
+  }
+}

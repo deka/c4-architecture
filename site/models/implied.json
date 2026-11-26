@@ -1,0 +1,75 @@
+{
+  "$schema": "../../schema/c4.schema.json",
+  "version": 1,
+  "name": "Implied relationships",
+  "model": {
+    "people": [
+      {
+        "id": "user",
+        "name": "User",
+        "description": "Uses the app"
+      }
+    ],
+    "softwareSystems": [
+      {
+        "id": "app",
+        "name": "App",
+        "description": "The system",
+        "containers": [
+          {
+            "id": "web",
+            "name": "Web app",
+            "description": "User interface",
+            "technology": "Vue"
+          },
+          {
+            "id": "api",
+            "name": "API",
+            "description": "Business logic",
+            "technology": "Python"
+          }
+        ]
+      },
+      {
+        "id": "mail",
+        "name": "Mail service",
+        "description": "Sends emails",
+        "external": true
+      }
+    ],
+    "relationships": [
+      {
+        "from": "user",
+        "to": "web",
+        "description": "Uses",
+        "technology": "HTTPS"
+      },
+      {
+        "from": "web",
+        "to": "api",
+        "description": "Calls",
+        "technology": "HTTPS/JSON"
+      },
+      {
+        "from": "api",
+        "to": "mail",
+        "description": "Sends emails using",
+        "technology": "SMTP"
+      }
+    ]
+  },
+  "views": [
+    {
+      "type": "systemContext",
+      "key": "context",
+      "scope": "app",
+      "title": "Context: links derived from the containers"
+    },
+    {
+      "type": "container",
+      "key": "containers",
+      "scope": "app",
+      "title": "Containers: links as declared"
+    }
+  ]
+}

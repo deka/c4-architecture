@@ -1,0 +1,72 @@
+{
+  "$schema": "../schema/c4.schema.json",
+  "version": 1,
+  "name": "Online banking",
+  "description": "Reference model used by the scenarios in features/.",
+  "model": {
+    "people": [
+      { "id": "customer", "name": "Customer", "description": "Personal banking customer", "external": true },
+      { "id": "advisor", "name": "Advisor", "description": "Branch employee", "group": "Branch" }
+    ],
+    "softwareSystems": [
+      {
+        "id": "banking",
+        "name": "Online banking",
+        "description": "Account overview and transfers",
+        "containers": [
+          { "id": "web", "name": "Web application", "description": "Customer interface", "technology": "React" },
+          {
+            "id": "api",
+            "name": "API",
+            "description": "Business logic",
+            "technology": "Node.js",
+            "components": [
+              { "id": "controller", "name": "Accounts controller", "description": "Exposes the REST routes", "technology": "Express" },
+              { "id": "service", "name": "Accounts service", "description": "Business rules", "technology": "TypeScript" },
+              { "id": "repository", "name": "Accounts repository", "description": "Data access", "technology": "Prisma" }
+            ]
+          },
+          { "id": "database", "name": "Database", "description": "Accounts and transactions", "technology": "PostgreSQL", "tags": ["Database"] }
+        ]
+      },
+      { "id": "mainframe", "name": "Mainframe", "description": "Core banking system", "group": "Branch" },
+      { "id": "email", "name": "Email system", "description": "Sends emails", "external": true }
+    ],
+    "relationships": [
+      { "from": "customer", "to": "web", "description": "Views accounts", "technology": "HTTPS" },
+      { "from": "advisor", "to": "mainframe", "description": "Manages accounts" },
+      { "from": "web", "to": "controller", "description": "Calls", "technology": "HTTPS/JSON" },
+      { "from": "controller", "to": "service", "description": "Delegates to" },
+      { "from": "service", "to": "repository", "description": "Reads and writes" },
+      { "id": "repositoryToDatabase", "from": "repository", "to": "database", "description": "Reads and writes", "technology": "SQL" },
+      { "from": "service", "to": "mainframe", "description": "Syncs transfers", "technology": "MQ" },
+      { "from": "service", "to": "email", "description": "Sends notifications", "technology": "SMTP" },
+      { "from": "email", "to": "customer", "description": "Sends an email" }
+    ]
+  },
+  "views": [
+    { "type": "systemLandscape", "key": "landscape", "title": "Landscape" },
+    { "type": "systemContext", "key": "context", "scope": "banking", "title": "Context" },
+    { "type": "container", "key": "containers", "scope": "banking", "title": "Containers" },
+    { "type": "component", "key": "components", "scope": "api", "title": "API components" },
+    {
+      "type": "dynamic",
+      "key": "transfer",
+      "scope": "banking",
+      "title": "Make a transfer",
+      "steps": [
+        { "from": "customer", "to": "web", "description": "Submits a transfer" },
+        { "from": "web", "to": "api", "description": "Sends the transfer" },
+        { "from": "api", "to": "database", "description": "Records the transfer" },
+        { "from": "api", "to": "mainframe", "description": "Syncs the transfer" },
+        { "from": "api", "to": "email", "description": "Requests a confirmation" },
+        { "from": "email", "to": "customer", "description": "Sends the confirmation" }
+      ]
+    }
+  ],
+  "styles": {
+    "elements": [
+      { "tag": "Database", "shape": "cylinder" }
+    ]
+  }
+}

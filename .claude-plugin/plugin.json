@@ -1,0 +1,6 @@
+{
+  "name": "c4-architecture",
+  "description": "Design software architectures as C4 models (JSON) and render them as SVG diagrams in a self-contained HTML page, record their architecture decisions, then check the code against them.",
+  "license": "Apache-2.0",
+  "keywords": ["c4", "architecture", "diagrams", "svg"]
+}

@@ -1,0 +1,213 @@
+{
+  "$schema": "../../schema/c4.schema.json",
+  "version": 1,
+  "name": "Shapes",
+  "model": {
+    "softwareSystems": [
+      {
+        "id": "box",
+        "name": "box",
+        "description": "\"box\" shape",
+        "tags": [
+          "shape-box"
+        ]
+      },
+      {
+        "id": "roundedBox",
+        "name": "roundedBox",
+        "description": "\"roundedBox\" shape",
+        "tags": [
+          "shape-roundedBox"
+        ]
+      },
+      {
+        "id": "person",
+        "name": "person",
+        "description": "\"person\" shape",
+        "tags": [
+          "shape-person"
+        ]
+      },
+      {
+        "id": "cylinder",
+        "name": "cylinder",
+        "description": "\"cylinder\" shape",
+        "tags": [
+          "shape-cylinder"
+        ]
+      },
+      {
+        "id": "pipe",
+        "name": "pipe",
+        "description": "\"pipe\" shape",
+        "tags": [
+          "shape-pipe"
+        ]
+      },
+      {
+        "id": "component",
+        "name": "component",
+        "description": "\"component\" shape",
+        "tags": [
+          "shape-component"
+        ]
+      },
+      {
+        "id": "webBrowser",
+        "name": "webBrowser",
+        "description": "\"webBrowser\" shape",
+        "tags": [
+          "shape-webBrowser"
+        ]
+      },
+      {
+        "id": "mobileDevicePortrait",
+        "name": "mobileDevicePortrait",
+        "description": "\"mobileDevicePortrait\" shape",
+        "tags": [
+          "shape-mobileDevicePortrait"
+        ]
+      },
+      {
+        "id": "folder",
+        "name": "folder",
+        "description": "\"folder\" shape",
+        "tags": [
+          "shape-folder"
+        ]
+      }
+    ]
+  },
+  "views": [
+    {
+      "type": "systemLandscape",
+      "key": "box",
+      "title": "box",
+      "include": [
+        "box"
+      ]
+    },
+    {
+      "type": "systemLandscape",
+      "key": "roundedBox",
+      "title": "roundedBox",
+      "include": [
+        "roundedBox"
+      ]
+    },
+    {
+      "type": "systemLandscape",
+      "key": "person",
+      "title": "person",
+      "include": [
+        "person"
+      ]
+    },
+    {
+      "type": "systemLandscape",
+      "key": "cylinder",
+      "title": "cylinder",
+      "include": [
+        "cylinder"
+      ]
+    },
+    {
+      "type": "systemLandscape",
+      "key": "pipe",
+      "title": "pipe",
+      "include": [
+        "pipe"
+      ]
+    },
+    {
+      "type": "systemLandscape",
+      "key": "component",
+      "title": "component",
+      "include": [
+        "component"
+      ]
+    },
+    {
+      "type": "systemLandscape",
+      "key": "webBrowser",
+      "title": "webBrowser",
+      "include": [
+        "webBrowser"
+      ]
+    },
+    {
+      "type": "systemLandscape",
+      "key": "mobileDevicePortrait",
+      "title": "mobileDevicePortrait",
+      "include": [
+        "mobileDevicePortrait"
+      ]
+    },
+    {
+      "type": "systemLandscape",
+      "key": "folder",
+      "title": "folder",
+      "include": [
+        "folder"
+      ]
+    }
+  ],
+  "styles": {
+    "elements": [
+      {
+        "tag": "shape-box",
+        "shape": "box",
+        "width": 280,
+        "height": 120
+      },
+      {
+        "tag": "shape-roundedBox",
+        "shape": "roundedBox",
+        "width": 280,
+        "height": 120
+      },
+      {
+        "tag": "shape-person",
+        "shape": "person",
+        "width": 280,
+        "height": 120
+      },
+      {
+        "tag": "shape-cylinder",
+        "shape": "cylinder",
+        "width": 280,
+        "height": 120
+      },
+      {
+        "tag": "shape-pipe",
+        "shape": "pipe",
+        "width": 280,
+        "height": 120
+      },
+      {
+        "tag": "shape-component",
+        "shape": "component",
+        "width": 280,
+        "height": 120
+      },
+      {
+        "tag": "shape-webBrowser",
+        "shape": "webBrowser",
+        "width": 280,
+        "height": 120
+      },
+      {
+        "tag": "shape-mobileDevicePortrait",
+        "shape": "mobileDevicePortrait",
+        "width": 280,
+        "height": 120
+      },
+      {
+        "tag": "shape-folder",
+        "shape": "folder",
+        "width": 280,
+        "height": 120
+      }
+    ]
+  }
+}

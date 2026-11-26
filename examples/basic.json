@@ -1,0 +1,28 @@
+{
+  "$schema": "../schema/c4.schema.json",
+  "version": 1,
+  "name": "Example",
+  "model": {
+    "people": [
+      { "id": "user", "name": "User" }
+    ],
+    "softwareSystems": [
+      {
+        "id": "app",
+        "name": "Application",
+        "containers": [
+          { "id": "web", "name": "Web App", "description": "User interface", "technology": "React" },
+          { "id": "api", "name": "API", "description": "Business logic", "technology": "Node.js" }
+        ]
+      }
+    ],
+    "relationships": [
+      { "from": "user", "to": "web", "description": "Uses" },
+      { "from": "web", "to": "api", "description": "Calls", "technology": "HTTPS/JSON" }
+    ]
+  },
+  "views": [
+    { "type": "systemContext", "key": "context", "scope": "app", "title": "Context" },
+    { "type": "container", "key": "containers", "scope": "app", "title": "Containers" }
+  ]
+}

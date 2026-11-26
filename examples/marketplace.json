@@ -1,0 +1,2277 @@
+{
+  "$schema": "../schema/c4.schema.json",
+  "version": 1,
+  "name": "Marketplace",
+  "description": "Large example: an online marketplace with many systems, containers, components and dynamic views, to see how the page behaves with volume.",
+  "model": {
+    "people": [
+      {
+        "id": "shopper",
+        "name": "Shopper",
+        "description": "Buys products online",
+        "external": true
+      },
+      {
+        "id": "seller",
+        "name": "Seller",
+        "description": "Lists products on the marketplace",
+        "external": true
+      },
+      {
+        "id": "support",
+        "name": "Support agent",
+        "description": "Handles customer requests",
+        "group": "Staff"
+      },
+      {
+        "id": "warehouse-operator",
+        "name": "Warehouse operator",
+        "description": "Picks and packs orders",
+        "group": "Staff"
+      },
+      {
+        "id": "marketer",
+        "name": "Marketing manager",
+        "description": "Runs promotions",
+        "group": "Staff"
+      },
+      {
+        "id": "analyst",
+        "name": "Data analyst",
+        "description": "Studies sales and traffic",
+        "group": "Staff"
+      }
+    ],
+    "softwareSystems": [
+      {
+        "id": "storefront",
+        "name": "Storefront",
+        "description": "Web and mobile shop",
+        "group": "Customer facing",
+        "containers": [
+          {
+            "id": "web",
+            "name": "Web shop",
+            "description": "Product pages, cart and checkout",
+            "technology": "Next.js"
+          },
+          {
+            "id": "mobile",
+            "name": "Mobile app",
+            "description": "Shopping on iOS and Android",
+            "technology": "React Native"
+          },
+          {
+            "id": "bff",
+            "name": "Storefront API",
+            "description": "Backend for the web shop and the app",
+            "technology": "Node.js",
+            "components": [
+              {
+                "id": "bff-catalog",
+                "name": "Catalog gateway",
+                "description": "Aggregates product data",
+                "technology": "TypeScript"
+              },
+              {
+                "id": "bff-cart",
+                "name": "Cart service",
+                "description": "Holds the shopping cart",
+                "technology": "TypeScript"
+              },
+              {
+                "id": "bff-checkout",
+                "name": "Checkout orchestrator",
+                "description": "Drives the checkout",
+                "technology": "TypeScript"
+              },
+              {
+                "id": "bff-session",
+                "name": "Session manager",
+                "description": "Tracks the shopper session",
+                "technology": "TypeScript"
+              }
+            ]
+          },
+          {
+            "id": "cart-cache",
+            "name": "Cart cache",
+            "description": "Carts in progress",
+            "technology": "Redis",
+            "tags": [
+              "Database"
+            ]
+          }
+        ]
+      },
+      {
+        "id": "identity",
+        "name": "Identity",
+        "description": "Accounts, sign-in and profiles",
+        "group": "Platform",
+        "containers": [
+          {
+            "id": "auth",
+            "name": "Auth service",
+            "description": "Issues and checks tokens",
+            "technology": "Go",
+            "components": [
+              {
+                "id": "auth-login",
+                "name": "Login handler",
+                "description": "Checks credentials",
+                "technology": "Go"
+              },
+              {
+                "id": "auth-tokens",
+                "name": "Token issuer",
+                "description": "Signs access tokens",
+                "technology": "Go"
+              },
+              {
+                "id": "auth-mfa",
+                "name": "MFA verifier",
+                "description": "Checks one-time codes",
+                "technology": "Go"
+              }
+            ]
+          },
+          {
+            "id": "profiles",
+            "name": "Profile API",
+            "description": "Addresses and preferences",
+            "technology": "Kotlin"
+          },
+          {
+            "id": "identity-db",
+            "name": "Identity database",
+            "description": "Accounts and profiles",
+            "technology": "PostgreSQL",
+            "tags": [
+              "Database"
+            ]
+          }
+        ]
+      },
+      {
+        "id": "catalog",
+        "name": "Catalog",
+        "description": "Products, prices and search",
+        "group": "Commerce",
+        "containers": [
+          {
+            "id": "catalog-api",
+            "name": "Catalog API",
+            "description": "Products and prices",
+            "technology": "Java",
+            "components": [
+              {
+                "id": "product-controller",
+                "name": "Product controller",
+                "description": "REST routes for products",
+                "technology": "Spring"
+              },
+              {
+                "id": "product-service",
+                "name": "Product service",
+                "description": "Product rules",
+                "technology": "Java"
+              },
+              {
+                "id": "price-service",
+                "name": "Price service",
+                "description": "Computes the displayed price",
+                "technology": "Java"
+              },
+              {
+                "id": "product-repository",
+                "name": "Product repository",
+                "description": "Data access",
+                "technology": "JPA"
+              }
+            ]
+          },
+          {
+            "id": "importer",
+            "name": "Seller importer",
+            "description": "Imports seller feeds",
+            "technology": "Python"
+          },
+          {
+            "id": "search",
+            "name": "Search index",
+            "description": "Full-text product search",
+            "technology": "Elasticsearch",
+            "tags": [
+              "Database"
+            ]
+          },
+          {
+            "id": "catalog-db",
+            "name": "Catalog database",
+            "description": "Products and prices",
+            "technology": "PostgreSQL",
+            "tags": [
+              "Database"
+            ]
+          },
+          {
+            "id": "media",
+            "name": "Media store",
+            "description": "Product images",
+            "technology": "Object storage",
+            "tags": [
+              "Database"
+            ]
+          }
+        ]
+      },
+      {
+        "id": "orders",
+        "name": "Orders",
+        "description": "Order lifecycle",
+        "group": "Commerce",
+        "containers": [
+          {
+            "id": "orders-api",
+            "name": "Orders API",
+            "description": "Creates and tracks orders",
+            "technology": "Java",
+            "components": [
+              {
+                "id": "order-controller",
+                "name": "Order controller",
+                "description": "REST routes for orders",
+                "technology": "Spring"
+              },
+              {
+                "id": "order-service",
+                "name": "Order service",
+                "description": "Order state machine",
+                "technology": "Java"
+              },
+              {
+                "id": "order-repository",
+                "name": "Order repository",
+                "description": "Data access",
+                "technology": "JPA"
+              },
+              {
+                "id": "order-publisher",
+                "name": "Event publisher",
+                "description": "Publishes order events",
+                "technology": "Kafka client"
+              }
+            ]
+          },
+          {
+            "id": "orders-worker",
+            "name": "Orders worker",
+            "description": "Reacts to payment and shipping events",
+            "technology": "Java"
+          },
+          {
+            "id": "orders-db",
+            "name": "Orders database",
+            "description": "Orders and order lines",
+            "technology": "PostgreSQL",
+            "tags": [
+              "Database"
+            ]
+          },
+          {
+            "id": "orders-bus",
+            "name": "Order events",
+            "description": "Order event stream",
+            "technology": "Kafka",
+            "tags": [
+              "Queue"
+            ]
+          }
+        ]
+      },
+      {
+        "id": "payments",
+        "name": "Payments",
+        "description": "Card payments and refunds",
+        "group": "Commerce",
+        "containers": [
+          {
+            "id": "payments-api",
+            "name": "Payments API",
+            "description": "Authorises and captures payments",
+            "technology": "Go",
+            "components": [
+              {
+                "id": "payment-handler",
+                "name": "Payment handler",
+                "description": "Payment routes",
+                "technology": "Go"
+              },
+              {
+                "id": "provider-adapter",
+                "name": "Provider adapter",
+                "description": "Talks to the payment provider",
+                "technology": "Go"
+              },
+              {
+                "id": "refund-service",
+                "name": "Refund service",
+                "description": "Issues refunds",
+                "technology": "Go"
+              },
+              {
+                "id": "ledger",
+                "name": "Ledger",
+                "description": "Records every money movement",
+                "technology": "Go"
+              }
+            ]
+          },
+          {
+            "id": "fraud",
+            "name": "Fraud scorer",
+            "description": "Scores payment risk",
+            "technology": "Python"
+          },
+          {
+            "id": "payments-db",
+            "name": "Payments database",
+            "description": "Payments and ledger entries",
+            "technology": "PostgreSQL",
+            "tags": [
+              "Database"
+            ]
+          }
+        ]
+      },
+      {
+        "id": "inventory",
+        "name": "Inventory",
+        "description": "Stock levels per warehouse",
+        "group": "Logistics",
+        "containers": [
+          {
+            "id": "inventory-api",
+            "name": "Inventory API",
+            "description": "Reserves and releases stock",
+            "technology": "Rust",
+            "components": [
+              {
+                "id": "stock-controller",
+                "name": "Stock controller",
+                "description": "Stock routes",
+                "technology": "Axum"
+              },
+              {
+                "id": "reservation-service",
+                "name": "Reservation service",
+                "description": "Reserves stock for orders",
+                "technology": "Rust"
+              },
+              {
+                "id": "stock-repository",
+                "name": "Stock repository",
+                "description": "Data access",
+                "technology": "SQLx"
+              }
+            ]
+          },
+          {
+            "id": "erp-sync",
+            "name": "ERP sync",
+            "description": "Syncs stock with the ERP",
+            "technology": "Python"
+          },
+          {
+            "id": "inventory-db",
+            "name": "Inventory database",
+            "description": "Stock levels and reservations",
+            "technology": "PostgreSQL",
+            "tags": [
+              "Database"
+            ]
+          }
+        ]
+      },
+      {
+        "id": "shipping",
+        "name": "Shipping",
+        "description": "Parcels, labels and tracking",
+        "group": "Logistics",
+        "containers": [
+          {
+            "id": "shipping-api",
+            "name": "Shipping API",
+            "description": "Creates shipments",
+            "technology": "Kotlin",
+            "components": [
+              {
+                "id": "shipment-controller",
+                "name": "Shipment controller",
+                "description": "Shipment routes",
+                "technology": "Ktor"
+              },
+              {
+                "id": "rate-service",
+                "name": "Rate service",
+                "description": "Compares carrier rates",
+                "technology": "Kotlin"
+              },
+              {
+                "id": "label-service",
+                "name": "Label service",
+                "description": "Prints shipping labels",
+                "technology": "Kotlin"
+              },
+              {
+                "id": "tracking-service",
+                "name": "Tracking service",
+                "description": "Follows parcels",
+                "technology": "Kotlin"
+              }
+            ]
+          },
+          {
+            "id": "warehouse-app",
+            "name": "Warehouse app",
+            "description": "Picking and packing",
+            "technology": "Flutter"
+          },
+          {
+            "id": "shipping-db",
+            "name": "Shipping database",
+            "description": "Shipments and tracking",
+            "technology": "PostgreSQL",
+            "tags": [
+              "Database"
+            ]
+          }
+        ]
+      },
+      {
+        "id": "notifications",
+        "name": "Notifications",
+        "description": "Emails, SMS and push",
+        "group": "Platform",
+        "containers": [
+          {
+            "id": "notify-api",
+            "name": "Notification API",
+            "description": "Accepts notification requests",
+            "technology": "Node.js",
+            "components": [
+              {
+                "id": "notify-controller",
+                "name": "Notification controller",
+                "description": "Notification routes",
+                "technology": "Fastify"
+              },
+              {
+                "id": "template-renderer",
+                "name": "Template renderer",
+                "description": "Renders messages",
+                "technology": "Handlebars"
+              },
+              {
+                "id": "channel-router",
+                "name": "Channel router",
+                "description": "Chooses email, SMS or push",
+                "technology": "TypeScript"
+              }
+            ]
+          },
+          {
+            "id": "notify-queue",
+            "name": "Notification queue",
+            "description": "Pending messages",
+            "technology": "RabbitMQ",
+            "tags": [
+              "Queue"
+            ]
+          },
+          {
+            "id": "email-worker",
+            "name": "Email worker",
+            "description": "Sends emails",
+            "technology": "Node.js"
+          },
+          {
+            "id": "sms-worker",
+            "name": "SMS worker",
+            "description": "Sends SMS",
+            "technology": "Node.js"
+          },
+          {
+            "id": "templates-db",
+            "name": "Templates database",
+            "description": "Message templates",
+            "technology": "MongoDB",
+            "tags": [
+              "Database"
+            ]
+          }
+        ]
+      },
+      {
+        "id": "promotions",
+        "name": "Promotions",
+        "description": "Coupons and campaigns",
+        "group": "Commerce",
+        "containers": [
+          {
+            "id": "promo-api",
+            "name": "Promotions API",
+            "description": "Evaluates coupons",
+            "technology": "Python",
+            "components": [
+              {
+                "id": "coupon-service",
+                "name": "Coupon service",
+                "description": "Checks and redeems coupons",
+                "technology": "FastAPI"
+              },
+              {
+                "id": "campaign-service",
+                "name": "Campaign service",
+                "description": "Schedules campaigns",
+                "technology": "FastAPI"
+              },
+              {
+                "id": "eligibility",
+                "name": "Eligibility engine",
+                "description": "Matches carts to rules",
+                "technology": "Python"
+              }
+            ]
+          },
+          {
+            "id": "promo-db",
+            "name": "Promotions database",
+            "description": "Coupons and campaigns",
+            "technology": "PostgreSQL",
+            "tags": [
+              "Database"
+            ]
+          }
+        ]
+      },
+      {
+        "id": "reviews",
+        "name": "Reviews",
+        "description": "Product ratings and reviews",
+        "group": "Customer facing",
+        "containers": [
+          {
+            "id": "reviews-api",
+            "name": "Reviews API",
+            "description": "Collects and serves reviews",
+            "technology": "Elixir",
+            "components": [
+              {
+                "id": "review-controller",
+                "name": "Review controller",
+                "description": "Review routes",
+                "technology": "Phoenix"
+              },
+              {
+                "id": "moderation",
+                "name": "Moderation",
+                "description": "Flags abusive reviews",
+                "technology": "Elixir"
+              },
+              {
+                "id": "rating-aggregator",
+                "name": "Rating aggregator",
+                "description": "Computes average ratings",
+                "technology": "Elixir"
+              }
+            ]
+          },
+          {
+            "id": "reviews-db",
+            "name": "Reviews database",
+            "description": "Reviews and ratings",
+            "technology": "PostgreSQL",
+            "tags": [
+              "Database"
+            ]
+          }
+        ]
+      },
+      {
+        "id": "backoffice",
+        "name": "Back office",
+        "description": "Staff tools",
+        "group": "Staff tools",
+        "containers": [
+          {
+            "id": "admin-web",
+            "name": "Admin console",
+            "description": "Staff web interface",
+            "technology": "Vue"
+          },
+          {
+            "id": "admin-api",
+            "name": "Admin API",
+            "description": "Staff operations",
+            "technology": "Node.js",
+            "components": [
+              {
+                "id": "admin-orders",
+                "name": "Order tools",
+                "description": "Searches and edits orders",
+                "technology": "TypeScript"
+              },
+              {
+                "id": "admin-catalog",
+                "name": "Catalog tools",
+                "description": "Moderates seller listings",
+                "technology": "TypeScript"
+              },
+              {
+                "id": "admin-promos",
+                "name": "Promotion tools",
+                "description": "Creates campaigns",
+                "technology": "TypeScript"
+              },
+              {
+                "id": "admin-audit",
+                "name": "Audit log",
+                "description": "Records staff actions",
+                "technology": "TypeScript"
+              }
+            ]
+          },
+          {
+            "id": "seller-portal",
+            "name": "Seller portal",
+            "description": "Seller self-service",
+            "technology": "Next.js"
+          }
+        ]
+      },
+      {
+        "id": "analytics",
+        "name": "Analytics",
+        "description": "Events, warehouse and dashboards",
+        "group": "Data",
+        "containers": [
+          {
+            "id": "collector",
+            "name": "Event collector",
+            "description": "Receives tracking events",
+            "technology": "Go"
+          },
+          {
+            "id": "pipeline",
+            "name": "Data pipeline",
+            "description": "Cleans and loads events",
+            "technology": "Spark"
+          },
+          {
+            "id": "warehouse",
+            "name": "Data warehouse",
+            "description": "Sales and traffic history",
+            "technology": "BigQuery",
+            "tags": [
+              "Database"
+            ]
+          },
+          {
+            "id": "dashboards",
+            "name": "Dashboards",
+            "description": "Business reports",
+            "technology": "Metabase"
+          }
+        ]
+      },
+      {
+        "id": "payment-provider",
+        "name": "Payment provider",
+        "description": "Card processing",
+        "external": true
+      },
+      {
+        "id": "carrier",
+        "name": "Parcel carrier",
+        "description": "Delivers parcels",
+        "external": true
+      },
+      {
+        "id": "email-provider",
+        "name": "Email provider",
+        "description": "Delivers emails",
+        "external": true
+      },
+      {
+        "id": "sms-provider",
+        "name": "SMS provider",
+        "description": "Delivers SMS",
+        "external": true
+      },
+      {
+        "id": "erp",
+        "name": "ERP",
+        "description": "Company accounting and purchasing",
+        "external": true
+      },
+      {
+        "id": "tax",
+        "name": "Tax service",
+        "description": "Computes sales tax",
+        "external": true
+      },
+      {
+        "id": "ad-network",
+        "name": "Ad network",
+        "description": "Retargeting campaigns",
+        "external": true
+      }
+    ],
+    "relationships": [
+      {
+        "from": "shopper",
+        "to": "web",
+        "description": "Browses and buys",
+        "technology": "HTTPS"
+      },
+      {
+        "from": "shopper",
+        "to": "mobile",
+        "description": "Browses and buys",
+        "technology": "HTTPS"
+      },
+      {
+        "from": "web",
+        "to": "bff-session",
+        "description": "Calls",
+        "technology": "HTTPS/JSON"
+      },
+      {
+        "from": "mobile",
+        "to": "bff-session",
+        "description": "Calls",
+        "technology": "HTTPS/JSON"
+      },
+      {
+        "from": "web",
+        "to": "bff-catalog",
+        "description": "Loads products",
+        "technology": "HTTPS/JSON"
+      },
+      {
+        "from": "mobile",
+        "to": "bff-catalog",
+        "description": "Loads products",
+        "technology": "HTTPS/JSON"
+      },
+      {
+        "from": "web",
+        "to": "bff-cart",
+        "description": "Updates the cart",
+        "technology": "HTTPS/JSON"
+      },
+      {
+        "from": "mobile",
+        "to": "bff-cart",
+        "description": "Updates the cart",
+        "technology": "HTTPS/JSON"
+      },
+      {
+        "from": "web",
+        "to": "bff-checkout",
+        "description": "Checks out",
+        "technology": "HTTPS/JSON"
+      },
+      {
+        "from": "web",
+        "to": "collector",
+        "description": "Sends tracking events",
+        "technology": "HTTPS"
+      },
+      {
+        "from": "mobile",
+        "to": "collector",
+        "description": "Sends tracking events",
+        "technology": "HTTPS"
+      },
+      {
+        "from": "bff-session",
+        "to": "auth-login",
+        "description": "Signs the shopper in",
+        "technology": "HTTPS"
+      },
+      {
+        "from": "bff-cart",
+        "to": "cart-cache",
+        "description": "Stores the cart",
+        "technology": "RESP"
+      },
+      {
+        "from": "bff-catalog",
+        "to": "product-controller",
+        "description": "Gets products",
+        "technology": "HTTPS/JSON"
+      },
+      {
+        "from": "bff-catalog",
+        "to": "search",
+        "description": "Searches products",
+        "technology": "HTTPS"
+      },
+      {
+        "from": "bff-catalog",
+        "to": "review-controller",
+        "description": "Gets ratings",
+        "technology": "HTTPS/JSON"
+      },
+      {
+        "from": "bff-checkout",
+        "to": "bff-cart",
+        "description": "Reads the cart"
+      },
+      {
+        "from": "bff-checkout",
+        "to": "coupon-service",
+        "description": "Applies a coupon",
+        "technology": "HTTPS/JSON"
+      },
+      {
+        "from": "bff-checkout",
+        "to": "order-controller",
+        "description": "Places the order",
+        "technology": "HTTPS/JSON"
+      },
+      {
+        "from": "bff-checkout",
+        "to": "payment-handler",
+        "description": "Pays",
+        "technology": "HTTPS/JSON"
+      },
+      {
+        "from": "bff-checkout",
+        "to": "profiles",
+        "description": "Reads addresses",
+        "technology": "HTTPS/JSON"
+      },
+      {
+        "from": "auth-login",
+        "to": "auth-mfa",
+        "description": "Asks for a code"
+      },
+      {
+        "from": "auth-login",
+        "to": "auth-tokens",
+        "description": "Requests a token"
+      },
+      {
+        "from": "auth-login",
+        "to": "identity-db",
+        "description": "Reads accounts",
+        "technology": "SQL"
+      },
+      {
+        "from": "auth-mfa",
+        "to": "notify-controller",
+        "description": "Sends a code",
+        "technology": "HTTPS/JSON"
+      },
+      {
+        "from": "profiles",
+        "to": "identity-db",
+        "description": "Reads and writes",
+        "technology": "SQL"
+      },
+      {
+        "from": "product-controller",
+        "to": "product-service",
+        "description": "Delegates to"
+      },
+      {
+        "from": "product-service",
+        "to": "price-service",
+        "description": "Prices products"
+      },
+      {
+        "from": "product-service",
+        "to": "product-repository",
+        "description": "Reads and writes"
+      },
+      {
+        "from": "product-repository",
+        "to": "catalog-db",
+        "description": "Reads and writes",
+        "technology": "SQL"
+      },
+      {
+        "from": "price-service",
+        "to": "tax",
+        "description": "Computes tax",
+        "technology": "HTTPS"
+      },
+      {
+        "from": "product-service",
+        "to": "search",
+        "description": "Indexes products",
+        "technology": "HTTPS"
+      },
+      {
+        "from": "product-service",
+        "to": "media",
+        "description": "Stores images",
+        "technology": "S3 API"
+      },
+      {
+        "from": "importer",
+        "to": "product-controller",
+        "description": "Upserts products",
+        "technology": "HTTPS/JSON"
+      },
+      {
+        "from": "seller",
+        "to": "seller-portal",
+        "description": "Manages listings",
+        "technology": "HTTPS"
+      },
+      {
+        "from": "seller-portal",
+        "to": "importer",
+        "description": "Uploads feeds",
+        "technology": "HTTPS"
+      },
+      {
+        "from": "seller-portal",
+        "to": "auth-login",
+        "description": "Signs in",
+        "technology": "HTTPS"
+      },
+      {
+        "from": "order-controller",
+        "to": "order-service",
+        "description": "Delegates to"
+      },
+      {
+        "from": "order-service",
+        "to": "order-repository",
+        "description": "Reads and writes"
+      },
+      {
+        "from": "order-repository",
+        "to": "orders-db",
+        "description": "Reads and writes",
+        "technology": "SQL"
+      },
+      {
+        "from": "order-service",
+        "to": "order-publisher",
+        "description": "Emits events"
+      },
+      {
+        "from": "order-publisher",
+        "to": "orders-bus",
+        "description": "Publishes",
+        "technology": "Kafka"
+      },
+      {
+        "from": "order-service",
+        "to": "reservation-service",
+        "description": "Reserves stock",
+        "technology": "gRPC"
+      },
+      {
+        "from": "order-service",
+        "to": "tax",
+        "description": "Computes tax",
+        "technology": "HTTPS"
+      },
+      {
+        "from": "orders-bus",
+        "to": "orders-worker",
+        "description": "Delivers events",
+        "technology": "Kafka"
+      },
+      {
+        "from": "orders-bus",
+        "to": "pipeline",
+        "description": "Streams order events",
+        "technology": "Kafka"
+      },
+      {
+        "from": "orders-worker",
+        "to": "shipment-controller",
+        "description": "Requests a shipment",
+        "technology": "HTTPS/JSON"
+      },
+      {
+        "from": "orders-worker",
+        "to": "notify-controller",
+        "description": "Notifies the shopper",
+        "technology": "HTTPS/JSON"
+      },
+      {
+        "from": "orders-worker",
+        "to": "orders-db",
+        "description": "Updates order status",
+        "technology": "SQL"
+      },
+      {
+        "from": "payment-handler",
+        "to": "fraud",
+        "description": "Scores the payment",
+        "technology": "gRPC"
+      },
+      {
+        "from": "payment-handler",
+        "to": "provider-adapter",
+        "description": "Authorises"
+      },
+      {
+        "from": "payment-handler",
+        "to": "ledger",
+        "description": "Records"
+      },
+      {
+        "from": "refund-service",
+        "to": "provider-adapter",
+        "description": "Refunds"
+      },
+      {
+        "from": "refund-service",
+        "to": "ledger",
+        "description": "Records"
+      },
+      {
+        "from": "provider-adapter",
+        "to": "payment-provider",
+        "description": "Calls",
+        "technology": "HTTPS"
+      },
+      {
+        "from": "ledger",
+        "to": "payments-db",
+        "description": "Writes",
+        "technology": "SQL"
+      },
+      {
+        "from": "payment-handler",
+        "to": "orders-bus",
+        "description": "Publishes payment events",
+        "technology": "Kafka"
+      },
+      {
+        "from": "ledger",
+        "to": "erp",
+        "description": "Exports entries",
+        "technology": "SFTP"
+      },
+      {
+        "from": "stock-controller",
+        "to": "reservation-service",
+        "description": "Delegates to"
+      },
+      {
+        "from": "reservation-service",
+        "to": "stock-repository",
+        "description": "Reads and writes"
+      },
+      {
+        "from": "stock-repository",
+        "to": "inventory-db",
+        "description": "Reads and writes",
+        "technology": "SQL"
+      },
+      {
+        "from": "erp-sync",
+        "to": "erp",
+        "description": "Reads purchase orders",
+        "technology": "SOAP"
+      },
+      {
+        "from": "erp-sync",
+        "to": "stock-controller",
+        "description": "Updates stock",
+        "technology": "HTTPS/JSON"
+      },
+      {
+        "from": "shipment-controller",
+        "to": "rate-service",
+        "description": "Gets rates"
+      },
+      {
+        "from": "shipment-controller",
+        "to": "label-service",
+        "description": "Prints a label"
+      },
+      {
+        "from": "rate-service",
+        "to": "carrier",
+        "description": "Quotes",
+        "technology": "HTTPS"
+      },
+      {
+        "from": "label-service",
+        "to": "carrier",
+        "description": "Books a pickup",
+        "technology": "HTTPS"
+      },
+      {
+        "from": "tracking-service",
+        "to": "carrier",
+        "description": "Polls tracking",
+        "technology": "HTTPS"
+      },
+      {
+        "from": "tracking-service",
+        "to": "shipping-db",
+        "description": "Writes",
+        "technology": "SQL"
+      },
+      {
+        "from": "label-service",
+        "to": "shipping-db",
+        "description": "Writes",
+        "technology": "SQL"
+      },
+      {
+        "from": "tracking-service",
+        "to": "orders-bus",
+        "description": "Publishes delivery events",
+        "technology": "Kafka"
+      },
+      {
+        "from": "warehouse-operator",
+        "to": "warehouse-app",
+        "description": "Picks and packs",
+        "technology": "HTTPS"
+      },
+      {
+        "from": "warehouse-app",
+        "to": "shipment-controller",
+        "description": "Confirms parcels",
+        "technology": "HTTPS/JSON"
+      },
+      {
+        "from": "warehouse-app",
+        "to": "stock-controller",
+        "description": "Decrements stock",
+        "technology": "HTTPS/JSON"
+      },
+      {
+        "from": "notify-controller",
+        "to": "template-renderer",
+        "description": "Renders"
+      },
+      {
+        "from": "template-renderer",
+        "to": "templates-db",
+        "description": "Reads templates",
+        "technology": "MongoDB wire"
+      },
+      {
+        "from": "notify-controller",
+        "to": "channel-router",
+        "description": "Routes"
+      },
+      {
+        "from": "channel-router",
+        "to": "notify-queue",
+        "description": "Enqueues",
+        "technology": "AMQP"
+      },
+      {
+        "from": "notify-queue",
+        "to": "email-worker",
+        "description": "Delivers",
+        "technology": "AMQP"
+      },
+      {
+        "from": "notify-queue",
+        "to": "sms-worker",
+        "description": "Delivers",
+        "technology": "AMQP"
+      },
+      {
+        "from": "email-worker",
+        "to": "email-provider",
+        "description": "Sends",
+        "technology": "SMTP"
+      },
+      {
+        "from": "sms-worker",
+        "to": "sms-provider",
+        "description": "Sends",
+        "technology": "HTTPS"
+      },
+      {
+        "from": "email-provider",
+        "to": "shopper",
+        "description": "Delivers emails"
+      },
+      {
+        "from": "sms-provider",
+        "to": "shopper",
+        "description": "Delivers SMS"
+      },
+      {
+        "from": "coupon-service",
+        "to": "eligibility",
+        "description": "Checks rules"
+      },
+      {
+        "from": "coupon-service",
+        "to": "promo-db",
+        "description": "Reads and writes",
+        "technology": "SQL"
+      },
+      {
+        "from": "campaign-service",
+        "to": "promo-db",
+        "description": "Reads and writes",
+        "technology": "SQL"
+      },
+      {
+        "from": "campaign-service",
+        "to": "notify-controller",
+        "description": "Announces campaigns",
+        "technology": "HTTPS/JSON"
+      },
+      {
+        "from": "campaign-service",
+        "to": "ad-network",
+        "description": "Pushes audiences",
+        "technology": "HTTPS"
+      },
+      {
+        "from": "review-controller",
+        "to": "moderation",
+        "description": "Checks"
+      },
+      {
+        "from": "review-controller",
+        "to": "rating-aggregator",
+        "description": "Updates ratings"
+      },
+      {
+        "from": "review-controller",
+        "to": "reviews-db",
+        "description": "Reads and writes",
+        "technology": "SQL"
+      },
+      {
+        "from": "rating-aggregator",
+        "to": "reviews-db",
+        "description": "Writes averages",
+        "technology": "SQL"
+      },
+      {
+        "from": "rating-aggregator",
+        "to": "search",
+        "description": "Updates ratings",
+        "technology": "HTTPS"
+      },
+      {
+        "from": "support",
+        "to": "admin-web",
+        "description": "Handles requests",
+        "technology": "HTTPS"
+      },
+      {
+        "from": "marketer",
+        "to": "admin-web",
+        "description": "Runs promotions",
+        "technology": "HTTPS"
+      },
+      {
+        "from": "admin-web",
+        "to": "admin-orders",
+        "description": "Calls",
+        "technology": "HTTPS/JSON"
+      },
+      {
+        "from": "admin-web",
+        "to": "admin-catalog",
+        "description": "Calls",
+        "technology": "HTTPS/JSON"
+      },
+      {
+        "from": "admin-web",
+        "to": "admin-promos",
+        "description": "Calls",
+        "technology": "HTTPS/JSON"
+      },
+      {
+        "from": "admin-web",
+        "to": "auth-login",
+        "description": "Signs staff in",
+        "technology": "HTTPS"
+      },
+      {
+        "from": "admin-orders",
+        "to": "order-controller",
+        "description": "Edits orders",
+        "technology": "HTTPS/JSON"
+      },
+      {
+        "from": "admin-orders",
+        "to": "refund-service",
+        "description": "Refunds",
+        "technology": "HTTPS/JSON"
+      },
+      {
+        "from": "admin-catalog",
+        "to": "product-controller",
+        "description": "Moderates listings",
+        "technology": "HTTPS/JSON"
+      },
+      {
+        "from": "admin-catalog",
+        "to": "moderation",
+        "description": "Moderates reviews",
+        "technology": "HTTPS/JSON"
+      },
+      {
+        "from": "admin-promos",
+        "to": "campaign-service",
+        "description": "Creates campaigns",
+        "technology": "HTTPS/JSON"
+      },
+      {
+        "from": "admin-orders",
+        "to": "admin-audit",
+        "description": "Logs"
+      },
+      {
+        "from": "admin-catalog",
+        "to": "admin-audit",
+        "description": "Logs"
+      },
+      {
+        "from": "admin-promos",
+        "to": "admin-audit",
+        "description": "Logs"
+      },
+      {
+        "from": "collector",
+        "to": "pipeline",
+        "description": "Streams events",
+        "technology": "Pub/Sub"
+      },
+      {
+        "from": "pipeline",
+        "to": "warehouse",
+        "description": "Loads",
+        "technology": "BigQuery API"
+      },
+      {
+        "from": "dashboards",
+        "to": "warehouse",
+        "description": "Queries",
+        "technology": "SQL"
+      },
+      {
+        "from": "analyst",
+        "to": "dashboards",
+        "description": "Reads reports",
+        "technology": "HTTPS"
+      },
+      {
+        "from": "marketer",
+        "to": "dashboards",
+        "description": "Follows campaigns",
+        "technology": "HTTPS"
+      },
+      {
+        "from": "web",
+        "to": "review-controller",
+        "description": "Posts reviews",
+        "technology": "HTTPS/JSON"
+      }
+    ]
+  },
+  "views": [
+    {
+      "type": "systemLandscape",
+      "key": "landscape",
+      "title": "Marketplace landscape"
+    },
+    {
+      "type": "systemContext",
+      "key": "storefront-context",
+      "scope": "storefront",
+      "title": "Storefront - context"
+    },
+    {
+      "type": "systemContext",
+      "key": "identity-context",
+      "scope": "identity",
+      "title": "Identity - context"
+    },
+    {
+      "type": "systemContext",
+      "key": "catalog-context",
+      "scope": "catalog",
+      "title": "Catalog - context"
+    },
+    {
+      "type": "systemContext",
+      "key": "orders-context",
+      "scope": "orders",
+      "title": "Orders - context"
+    },
+    {
+      "type": "systemContext",
+      "key": "payments-context",
+      "scope": "payments",
+      "title": "Payments - context"
+    },
+    {
+      "type": "systemContext",
+      "key": "inventory-context",
+      "scope": "inventory",
+      "title": "Inventory - context"
+    },
+    {
+      "type": "systemContext",
+      "key": "shipping-context",
+      "scope": "shipping",
+      "title": "Shipping - context"
+    },
+    {
+      "type": "systemContext",
+      "key": "notifications-context",
+      "scope": "notifications",
+      "title": "Notifications - context"
+    },
+    {
+      "type": "systemContext",
+      "key": "promotions-context",
+      "scope": "promotions",
+      "title": "Promotions - context"
+    },
+    {
+      "type": "systemContext",
+      "key": "reviews-context",
+      "scope": "reviews",
+      "title": "Reviews - context"
+    },
+    {
+      "type": "systemContext",
+      "key": "backoffice-context",
+      "scope": "backoffice",
+      "title": "Back office - context"
+    },
+    {
+      "type": "systemContext",
+      "key": "analytics-context",
+      "scope": "analytics",
+      "title": "Analytics - context"
+    },
+    {
+      "type": "container",
+      "key": "storefront-containers",
+      "scope": "storefront",
+      "title": "Storefront - containers"
+    },
+    {
+      "type": "container",
+      "key": "identity-containers",
+      "scope": "identity",
+      "title": "Identity - containers"
+    },
+    {
+      "type": "container",
+      "key": "catalog-containers",
+      "scope": "catalog",
+      "title": "Catalog - containers"
+    },
+    {
+      "type": "container",
+      "key": "orders-containers",
+      "scope": "orders",
+      "title": "Orders - containers"
+    },
+    {
+      "type": "container",
+      "key": "payments-containers",
+      "scope": "payments",
+      "title": "Payments - containers"
+    },
+    {
+      "type": "container",
+      "key": "inventory-containers",
+      "scope": "inventory",
+      "title": "Inventory - containers"
+    },
+    {
+      "type": "container",
+      "key": "shipping-containers",
+      "scope": "shipping",
+      "title": "Shipping - containers"
+    },
+    {
+      "type": "container",
+      "key": "notifications-containers",
+      "scope": "notifications",
+      "title": "Notifications - containers"
+    },
+    {
+      "type": "container",
+      "key": "promotions-containers",
+      "scope": "promotions",
+      "title": "Promotions - containers"
+    },
+    {
+      "type": "container",
+      "key": "reviews-containers",
+      "scope": "reviews",
+      "title": "Reviews - containers"
+    },
+    {
+      "type": "container",
+      "key": "backoffice-containers",
+      "scope": "backoffice",
+      "title": "Back office - containers"
+    },
+    {
+      "type": "container",
+      "key": "analytics-containers",
+      "scope": "analytics",
+      "title": "Analytics - containers"
+    },
+    {
+      "type": "component",
+      "key": "bff-components",
+      "scope": "bff",
+      "title": "Storefront API - components"
+    },
+    {
+      "type": "component",
+      "key": "auth-components",
+      "scope": "auth",
+      "title": "Auth service - components"
+    },
+    {
+      "type": "component",
+      "key": "catalog-api-components",
+      "scope": "catalog-api",
+      "title": "Catalog API - components"
+    },
+    {
+      "type": "component",
+      "key": "orders-api-components",
+      "scope": "orders-api",
+      "title": "Orders API - components"
+    },
+    {
+      "type": "component",
+      "key": "payments-api-components",
+      "scope": "payments-api",
+      "title": "Payments API - components"
+    },
+    {
+      "type": "component",
+      "key": "inventory-api-components",
+      "scope": "inventory-api",
+      "title": "Inventory API - components"
+    },
+    {
+      "type": "component",
+      "key": "shipping-api-components",
+      "scope": "shipping-api",
+      "title": "Shipping API - components"
+    },
+    {
+      "type": "component",
+      "key": "notify-api-components",
+      "scope": "notify-api",
+      "title": "Notification API - components"
+    },
+    {
+      "type": "component",
+      "key": "promo-api-components",
+      "scope": "promo-api",
+      "title": "Promotions API - components"
+    },
+    {
+      "type": "component",
+      "key": "reviews-api-components",
+      "scope": "reviews-api",
+      "title": "Reviews API - components"
+    },
+    {
+      "type": "component",
+      "key": "admin-api-components",
+      "scope": "admin-api",
+      "title": "Admin API - components"
+    },
+    {
+      "type": "dynamic",
+      "key": "checkout",
+      "title": "Checkout across systems",
+      "steps": [
+        {
+          "from": "shopper",
+          "to": "storefront",
+          "description": "Checks out"
+        },
+        {
+          "from": "storefront",
+          "to": "promotions",
+          "description": "Applies a coupon"
+        },
+        {
+          "from": "storefront",
+          "to": "orders",
+          "description": "Places the order"
+        },
+        {
+          "from": "orders",
+          "to": "inventory",
+          "description": "Reserves stock"
+        },
+        {
+          "from": "storefront",
+          "to": "payments",
+          "description": "Pays"
+        },
+        {
+          "from": "payments",
+          "to": "payment-provider",
+          "description": "Authorises the card"
+        },
+        {
+          "from": "orders",
+          "to": "shipping",
+          "description": "Requests a shipment"
+        },
+        {
+          "from": "orders",
+          "to": "notifications",
+          "description": "Confirms the order"
+        },
+        {
+          "from": "notifications",
+          "to": "email-provider",
+          "description": "Sends the confirmation"
+        },
+        {
+          "from": "email-provider",
+          "to": "shopper",
+          "description": "Delivers the confirmation"
+        }
+      ]
+    },
+    {
+      "type": "dynamic",
+      "key": "sign-in",
+      "title": "Shopper sign-in",
+      "scope": "storefront",
+      "steps": [
+        {
+          "from": "shopper",
+          "to": "web",
+          "description": "Signs in"
+        },
+        {
+          "from": "web",
+          "to": "bff"
+        },
+        {
+          "from": "bff",
+          "to": "identity",
+          "description": "Checks credentials"
+        }
+      ]
+    },
+    {
+      "type": "dynamic",
+      "key": "browse",
+      "title": "Product browsing",
+      "scope": "storefront",
+      "steps": [
+        {
+          "from": "shopper",
+          "to": "web",
+          "description": "Opens a product"
+        },
+        {
+          "from": "web",
+          "to": "bff",
+          "description": "Loads products"
+        },
+        {
+          "from": "bff",
+          "to": "search",
+          "description": "Searches products"
+        },
+        {
+          "from": "bff",
+          "to": "catalog",
+          "description": "Gets products"
+        },
+        {
+          "from": "bff",
+          "to": "reviews",
+          "description": "Gets ratings"
+        },
+        {
+          "from": "web",
+          "to": "analytics",
+          "description": "Sends a page view"
+        }
+      ]
+    },
+    {
+      "type": "dynamic",
+      "key": "checkout-storefront",
+      "title": "Checkout in the storefront",
+      "scope": "storefront",
+      "steps": [
+        {
+          "from": "shopper",
+          "to": "web",
+          "description": "Checks out"
+        },
+        {
+          "from": "web",
+          "to": "bff",
+          "description": "Checks out"
+        },
+        {
+          "from": "bff",
+          "to": "cart-cache",
+          "description": "Reads the cart"
+        },
+        {
+          "from": "bff",
+          "to": "promotions",
+          "description": "Applies a coupon"
+        },
+        {
+          "from": "bff",
+          "to": "identity",
+          "description": "Reads addresses"
+        },
+        {
+          "from": "bff",
+          "to": "orders",
+          "description": "Places the order"
+        },
+        {
+          "from": "bff",
+          "to": "payments",
+          "description": "Pays"
+        }
+      ]
+    },
+    {
+      "type": "dynamic",
+      "key": "place-order",
+      "title": "Placing an order",
+      "scope": "orders",
+      "steps": [
+        {
+          "from": "storefront",
+          "to": "orders-api",
+          "description": "Places the order"
+        },
+        {
+          "from": "orders-api",
+          "to": "inventory",
+          "description": "Reserves stock"
+        },
+        {
+          "from": "orders-api",
+          "to": "tax",
+          "description": "Computes tax"
+        },
+        {
+          "from": "orders-api",
+          "to": "orders-db",
+          "description": "Stores the order"
+        },
+        {
+          "from": "orders-api",
+          "to": "orders-bus",
+          "description": "Publishes OrderPlaced"
+        }
+      ]
+    },
+    {
+      "type": "dynamic",
+      "key": "order-fulfilment",
+      "title": "Order fulfilment",
+      "scope": "orders",
+      "steps": [
+        {
+          "from": "payments",
+          "to": "orders-bus",
+          "description": "Publishes PaymentCaptured"
+        },
+        {
+          "from": "orders-bus",
+          "to": "orders-worker",
+          "description": "Delivers the event"
+        },
+        {
+          "from": "orders-worker",
+          "to": "orders-db",
+          "description": "Marks the order paid"
+        },
+        {
+          "from": "orders-worker",
+          "to": "shipping",
+          "description": "Requests a shipment"
+        },
+        {
+          "from": "orders-worker",
+          "to": "notifications",
+          "description": "Notifies the shopper"
+        }
+      ]
+    },
+    {
+      "type": "dynamic",
+      "key": "order-components",
+      "title": "Order creation inside the API",
+      "scope": "orders-api",
+      "steps": [
+        {
+          "from": "storefront",
+          "to": "order-controller",
+          "description": "Places the order"
+        },
+        {
+          "from": "order-controller",
+          "to": "order-service"
+        },
+        {
+          "from": "order-service",
+          "to": "inventory",
+          "description": "Reserves stock"
+        },
+        {
+          "from": "order-service",
+          "to": "order-repository",
+          "description": "Saves the order"
+        },
+        {
+          "from": "order-repository",
+          "to": "orders-db"
+        },
+        {
+          "from": "order-service",
+          "to": "order-publisher"
+        },
+        {
+          "from": "order-publisher",
+          "to": "orders-bus",
+          "description": "Publishes OrderPlaced"
+        }
+      ]
+    },
+    {
+      "type": "dynamic",
+      "key": "card-payment",
+      "title": "Card payment",
+      "scope": "payments-api",
+      "steps": [
+        {
+          "from": "storefront",
+          "to": "payment-handler",
+          "description": "Pays"
+        },
+        {
+          "from": "payment-handler",
+          "to": "fraud",
+          "description": "Scores the payment"
+        },
+        {
+          "from": "payment-handler",
+          "to": "provider-adapter",
+          "description": "Authorises"
+        },
+        {
+          "from": "provider-adapter",
+          "to": "payment-provider",
+          "description": "Authorises the card"
+        },
+        {
+          "from": "payment-handler",
+          "to": "ledger",
+          "description": "Records the capture"
+        },
+        {
+          "from": "ledger",
+          "to": "payments-db"
+        },
+        {
+          "from": "payment-handler",
+          "to": "orders-bus",
+          "description": "Publishes PaymentCaptured"
+        }
+      ]
+    },
+    {
+      "type": "dynamic",
+      "key": "refund",
+      "title": "Refund by support",
+      "steps": [
+        {
+          "from": "support",
+          "to": "backoffice",
+          "description": "Refunds an order"
+        },
+        {
+          "from": "backoffice",
+          "to": "payments",
+          "description": "Refunds"
+        },
+        {
+          "from": "payments",
+          "to": "payment-provider",
+          "description": "Refunds the card"
+        },
+        {
+          "from": "payments",
+          "to": "erp",
+          "description": "Exports the entry"
+        }
+      ]
+    },
+    {
+      "type": "dynamic",
+      "key": "refund-components",
+      "title": "Refund inside the payments API",
+      "scope": "payments-api",
+      "steps": [
+        {
+          "from": "backoffice",
+          "to": "refund-service",
+          "description": "Refunds"
+        },
+        {
+          "from": "refund-service",
+          "to": "provider-adapter"
+        },
+        {
+          "from": "provider-adapter",
+          "to": "payment-provider",
+          "description": "Refunds the card"
+        },
+        {
+          "from": "refund-service",
+          "to": "ledger",
+          "description": "Records the refund"
+        },
+        {
+          "from": "ledger",
+          "to": "erp",
+          "description": "Exports the entry"
+        }
+      ]
+    },
+    {
+      "type": "dynamic",
+      "key": "shipment",
+      "title": "Shipping a parcel",
+      "scope": "shipping",
+      "steps": [
+        {
+          "from": "orders",
+          "to": "shipping-api",
+          "description": "Requests a shipment"
+        },
+        {
+          "from": "shipping-api",
+          "to": "carrier",
+          "description": "Quotes and books"
+        },
+        {
+          "from": "warehouse-operator",
+          "to": "warehouse-app",
+          "description": "Packs the parcel"
+        },
+        {
+          "from": "warehouse-app",
+          "to": "shipping-api",
+          "description": "Confirms the parcel"
+        },
+        {
+          "from": "warehouse-app",
+          "to": "inventory",
+          "description": "Decrements stock"
+        },
+        {
+          "from": "shipping-api",
+          "to": "shipping-db",
+          "description": "Stores tracking"
+        }
+      ]
+    },
+    {
+      "type": "dynamic",
+      "key": "tracking",
+      "title": "Parcel tracking",
+      "scope": "shipping-api",
+      "steps": [
+        {
+          "from": "tracking-service",
+          "to": "carrier",
+          "description": "Polls tracking"
+        },
+        {
+          "from": "tracking-service",
+          "to": "shipping-db",
+          "description": "Stores the status"
+        },
+        {
+          "from": "tracking-service",
+          "to": "orders",
+          "description": "Publishes Delivered"
+        }
+      ]
+    },
+    {
+      "type": "dynamic",
+      "key": "stock-sync",
+      "title": "Stock sync with the ERP",
+      "scope": "inventory",
+      "steps": [
+        {
+          "from": "erp-sync",
+          "to": "erp",
+          "description": "Reads purchase orders"
+        },
+        {
+          "from": "erp-sync",
+          "to": "inventory-api",
+          "description": "Updates stock"
+        },
+        {
+          "from": "inventory-api",
+          "to": "inventory-db",
+          "description": "Writes stock levels"
+        }
+      ]
+    },
+    {
+      "type": "dynamic",
+      "key": "notification",
+      "title": "Sending a notification",
+      "scope": "notifications",
+      "steps": [
+        {
+          "from": "orders",
+          "to": "notify-api",
+          "description": "Notifies the shopper"
+        },
+        {
+          "from": "notify-api",
+          "to": "templates-db",
+          "description": "Reads the template"
+        },
+        {
+          "from": "notify-api",
+          "to": "notify-queue",
+          "description": "Enqueues"
+        },
+        {
+          "from": "notify-queue",
+          "to": "email-worker"
+        },
+        {
+          "from": "email-worker",
+          "to": "email-provider",
+          "description": "Sends the email"
+        },
+        {
+          "from": "email-provider",
+          "to": "shopper",
+          "description": "Delivers the email"
+        }
+      ]
+    },
+    {
+      "type": "dynamic",
+      "key": "mfa",
+      "title": "Two-factor sign-in",
+      "scope": "auth",
+      "steps": [
+        {
+          "from": "storefront",
+          "to": "auth-login",
+          "description": "Signs the shopper in"
+        },
+        {
+          "from": "auth-login",
+          "to": "identity-db",
+          "description": "Reads the account"
+        },
+        {
+          "from": "auth-login",
+          "to": "auth-mfa",
+          "description": "Asks for a code"
+        },
+        {
+          "from": "auth-mfa",
+          "to": "notifications",
+          "description": "Sends a code"
+        },
+        {
+          "from": "auth-login",
+          "to": "auth-tokens",
+          "description": "Requests a token"
+        }
+      ]
+    },
+    {
+      "type": "dynamic",
+      "key": "seller-import",
+      "title": "Seller catalog import",
+      "steps": [
+        {
+          "from": "seller",
+          "to": "backoffice",
+          "description": "Uploads a feed"
+        },
+        {
+          "from": "backoffice",
+          "to": "catalog",
+          "description": "Uploads the feed"
+        },
+        {
+          "from": "catalog",
+          "to": "tax",
+          "description": "Computes tax"
+        },
+        {
+          "from": "support",
+          "to": "backoffice",
+          "description": "Moderates listings"
+        },
+        {
+          "from": "backoffice",
+          "to": "catalog",
+          "description": "Moderates listings"
+        }
+      ]
+    },
+    {
+      "type": "dynamic",
+      "key": "campaign",
+      "title": "Launching a campaign",
+      "steps": [
+        {
+          "from": "marketer",
+          "to": "backoffice",
+          "description": "Creates a campaign"
+        },
+        {
+          "from": "backoffice",
+          "to": "promotions",
+          "description": "Creates the campaign"
+        },
+        {
+          "from": "promotions",
+          "to": "notifications",
+          "description": "Announces the campaign"
+        },
+        {
+          "from": "promotions",
+          "to": "ad-network",
+          "description": "Pushes audiences"
+        },
+        {
+          "from": "marketer",
+          "to": "analytics",
+          "description": "Follows the campaign"
+        }
+      ]
+    },
+    {
+      "type": "dynamic",
+      "key": "review",
+      "title": "Posting a review",
+      "scope": "reviews-api",
+      "steps": [
+        {
+          "from": "storefront",
+          "to": "review-controller",
+          "description": "Posts a review"
+        },
+        {
+          "from": "review-controller",
+          "to": "moderation",
+          "description": "Checks the text"
+        },
+        {
+          "from": "review-controller",
+          "to": "reviews-db",
+          "description": "Stores the review"
+        },
+        {
+          "from": "review-controller",
+          "to": "rating-aggregator",
+          "description": "Updates ratings"
+        },
+        {
+          "from": "rating-aggregator",
+          "to": "catalog",
+          "description": "Updates the search index"
+        }
+      ]
+    },
+    {
+      "type": "dynamic",
+      "key": "analytics-flow",
+      "title": "From click to report",
+      "scope": "analytics",
+      "steps": [
+        {
+          "from": "storefront",
+          "to": "collector",
+          "description": "Sends a page view"
+        },
+        {
+          "from": "collector",
+          "to": "pipeline",
+          "description": "Streams events"
+        },
+        {
+          "from": "orders",
+          "to": "pipeline",
+          "description": "Streams order events"
+        },
+        {
+          "from": "pipeline",
+          "to": "warehouse",
+          "description": "Loads"
+        },
+        {
+          "from": "analyst",
+          "to": "dashboards",
+          "description": "Reads reports"
+        },
+        {
+          "from": "dashboards",
+          "to": "warehouse",
+          "description": "Queries"
+        }
+      ]
+    }
+  ],
+  "styles": {
+    "elements": [
+      {
+        "tag": "Database",
+        "shape": "cylinder"
+      },
+      {
+        "tag": "Queue",
+        "shape": "pipe"
+      }
+    ]
+  }
+}

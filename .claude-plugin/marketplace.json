@@ -1,0 +1,11 @@
+{
+  "name": "c4-architecture",
+  "owner": { "name": "c4-architecture maintainers" },
+  "plugins": [
+    {
+      "name": "c4-architecture",
+      "source": "./",
+      "description": "Design software architectures as C4 models and render them as SVG diagrams in HTML, record their architecture decisions, then check the code against them."
+    }
+  ]
+}

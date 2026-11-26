@@ -1,0 +1,22 @@
+{
+  "$schema": "../../schema/c4.schema.json",
+  "version": 1,
+  "name": "Bookshop",
+  "description": "Online shop for an independent bookstore",
+  "model": {
+    "people": [
+      { "id": "customer", "name": "Customer", "description": "Buys books online", "external": true }
+    ],
+    "softwareSystems": [
+      { "id": "shop", "name": "Bookshop", "description": "Catalogue, cart and orders" },
+      { "id": "payments", "name": "Payment provider", "description": "Card payments", "external": true }
+    ],
+    "relationships": [
+      { "from": "customer", "to": "shop", "description": "Browses and buys books using" },
+      { "from": "shop", "to": "payments", "description": "Charges cards using" }
+    ]
+  },
+  "views": [
+    { "type": "systemContext", "key": "context", "scope": "shop", "title": "Bookshop - system context" }
+  ]
+}

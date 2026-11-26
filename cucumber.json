@@ -1,0 +1,18 @@
+{
+  "default": {
+    "paths": [
+      "features/model/**/*.feature",
+      "features/views/**/*.feature",
+      "features/cli/**/*.feature",
+      "features/rendering/colors.feature",
+      "features/rendering/dynamic.feature"
+    ],
+    "import": [
+      "features/steps/**/*.ts"
+    ],
+    "format": [
+      "pretty"
+    ],
+    "strict": true
+  }
+}

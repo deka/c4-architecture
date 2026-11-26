@@ -1,0 +1,114 @@
+{
+  "$schema": "../../schema/c4.schema.json",
+  "version": 1,
+  "name": "Styles",
+  "model": {
+    "people": [
+      {
+        "id": "ops",
+        "name": "Operator",
+        "description": "Runs the platform"
+      }
+    ],
+    "softwareSystems": [
+      {
+        "id": "platform",
+        "name": "Platform",
+        "description": "The system being designed",
+        "containers": [
+          {
+            "id": "api",
+            "name": "API",
+            "description": "Public API",
+            "technology": "Kotlin"
+          },
+          {
+            "id": "legacy",
+            "name": "Legacy batch",
+            "description": "Being decommissioned",
+            "technology": "COBOL",
+            "tags": [
+              "Deprecated"
+            ]
+          },
+          {
+            "id": "queue",
+            "name": "Event bus",
+            "description": "Domain events",
+            "technology": "Kafka",
+            "tags": [
+              "Queue"
+            ]
+          }
+        ]
+      },
+      {
+        "id": "crm",
+        "name": "CRM",
+        "description": "Customer records",
+        "external": true
+      }
+    ],
+    "relationships": [
+      {
+        "from": "ops",
+        "to": "api",
+        "description": "Manages",
+        "technology": "HTTPS"
+      },
+      {
+        "from": "api",
+        "to": "queue",
+        "description": "Publishes events to",
+        "technology": "Kafka",
+        "tags": [
+          "Async"
+        ]
+      },
+      {
+        "from": "legacy",
+        "to": "queue",
+        "description": "Publishes events to",
+        "technology": "Kafka",
+        "tags": [
+          "Async"
+        ]
+      },
+      {
+        "from": "api",
+        "to": "crm",
+        "description": "Reads customers from",
+        "technology": "HTTPS/JSON"
+      }
+    ]
+  },
+  "views": [
+    {
+      "type": "container",
+      "key": "styled",
+      "scope": "platform"
+    }
+  ],
+  "styles": {
+    "elements": [
+      {
+        "tag": "Queue",
+        "shape": "pipe"
+      },
+      {
+        "tag": "Deprecated",
+        "border": "dashed",
+        "opacity": 60,
+        "background": "#fbe9e7",
+        "stroke": "#b4553f"
+      }
+    ],
+    "relationships": [
+      {
+        "tag": "Async",
+        "style": "dashed",
+        "color": "#b4553f"
+      }
+    ]
+  }
+}

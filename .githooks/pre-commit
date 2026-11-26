@@ -1,0 +1,3 @@
+#!/bin/sh
+# Never declare a version for the Claude Code plugin (see scripts/check-plugin-version.ts).
+exec node scripts/check-plugin-version.ts

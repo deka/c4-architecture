@@ -1,0 +1,40 @@
+{
+  "$schema": "../../schema/c4.schema.json",
+  "version": 1,
+  "name": "Bookshop",
+  "description": "Online shop for an independent bookstore",
+  "model": {
+    "people": [
+      { "id": "customer", "name": "Customer", "description": "Buys books online", "external": true }
+    ],
+    "softwareSystems": [
+      {
+        "id": "shop",
+        "name": "Bookshop",
+        "description": "Catalogue, cart and orders",
+        "containers": [
+          { "id": "web", "name": "Web shop", "description": "Storefront and cart", "technology": "Next.js", "tags": ["Browser"] },
+          { "id": "api", "name": "Order API", "description": "Takes and tracks orders", "technology": "Go" },
+          { "id": "db", "name": "Order database", "description": "Orders and stock", "technology": "PostgreSQL", "tags": ["Database"] }
+        ]
+      },
+      { "id": "payments", "name": "Payment provider", "description": "Card payments", "external": true }
+    ],
+    "relationships": [
+      { "from": "customer", "to": "web", "description": "Browses and buys books using", "technology": "HTTPS" },
+      { "from": "web", "to": "api", "description": "Places orders using", "technology": "HTTPS/JSON" },
+      { "from": "api", "to": "db", "description": "Reads and writes orders in", "technology": "SQL" },
+      { "from": "api", "to": "payments", "description": "Charges cards using", "technology": "HTTPS/JSON" }
+    ]
+  },
+  "views": [
+    { "type": "systemContext", "key": "context", "scope": "shop", "title": "Bookshop - system context" },
+    { "type": "container", "key": "containers", "scope": "shop", "title": "Bookshop - containers" }
+  ],
+  "styles": {
+    "elements": [
+      { "tag": "Database", "shape": "cylinder" },
+      { "tag": "Browser", "shape": "webBrowser" }
+    ]
+  }
+}

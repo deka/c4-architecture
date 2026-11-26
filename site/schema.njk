@@ -1,0 +1,84 @@
+---
+title: JSON schema reference
+summary: Every object and field of the C4 workspace JSON format, generated from schema/c4.schema.json.
+wide: true
+---
+{%- macro props(s) -%}
+<section id="{{ s.anchor }}">
+<h3>{{ s.title }}</h3>
+{% if s.description %}<p>{{ s.description | safe }}</p>{% endif %}
+<div class="table-wrap"><table>
+<thead><tr><th>Field</th><th>Type</th><th>Description</th></tr></thead>
+<tbody>
+{%- for p in s.properties %}
+<tr id="{{ s.anchor }}-{{ p.name | lower | replace('$', '') }}"><td class="prop-name"><code>{{ p.name }}</code>{% if p.required %} <span class="req">required</span>{% endif %}</td><td>{{ p.type | safe }}</td><td>{{ p.description | safe }}</td></tr>
+{%- endfor %}
+</tbody>
+</table></div>
+</section>
+{%- endmacro -%}
+
+<p class="lead">Every object of the workspace format, generated from <a href="/c4.schema.json"><code>c4.schema.json</code></a> (JSON Schema 2020-12) when this site is built. All objects are closed: an unknown field is an error.</p>
+
+<p>Point your editor to the schema for completion and validation: <code>"$schema": "path/to/schema/c4.schema.json"</code>. Rules the schema cannot express are listed in <a href="/validation/">Validation rules</a>.</p>
+
+<nav class="note"><p><strong>On this page:</strong>
+<a href="#workspace">Workspace</a> ·
+{% for s in schema.objects %}<a href="#{{ s.anchor }}">{{ s.title }}</a> · {% endfor %}
+<a href="#views">Views</a> ·
+{% for s in schema.afterViews %}<a href="#{{ s.anchor }}">{{ s.title }}</a> · {% endfor %}
+<a href="#common-types">Common types</a></p></nav>
+
+<h2 id="structure">Structure</h2>
+
+<pre><code>workspace
+├── version, name, description, include[]
+├── model
+│   ├── people[]            <a href="#person">person</a>
+│   ├── softwareSystems[]   <a href="#software-system">softwareSystem</a>
+│   │   └── containers[]    <a href="#container">container</a>
+│   │       └── components[] <a href="#component">component</a>
+│   └── relationships[]     <a href="#relationship">relationship</a>
+├── views[]                 <a href="#views">view</a> (by type)
+└── styles
+    ├── elements[]          <a href="#element-style">elementStyle</a>
+    └── relationships[]     <a href="#relationship-style">relationshipStyle</a></code></pre>
+
+<h2 id="model-objects">Workspace and model</h2>
+
+{{ props(schema.workspace) }}
+{% for s in schema.objects %}{{ props(s) }}{% endfor %}
+
+<h2 id="views">Views</h2>
+
+<p>A view is one of the five objects below, chosen by its <code>type</code>. See <a href="/views/">Views</a> for what each one shows.</p>
+
+{% for s in schema.views %}{{ props(s) }}{% endfor %}
+
+<h2 id="view-details">View details and styles</h2>
+
+{% for s in schema.afterViews %}{{ props(s) }}{% endfor %}
+
+<h2 id="common-types">Common types</h2>
+
+{% for t in schema.common %}
+<section id="{{ t.anchor }}">
+<h3>{{ t.title }}</h3>
+<p>{{ t.description | safe }}</p>
+</section>
+{% endfor %}
+
+<section id="{{ schema.selector.anchor }}">
+<h3>selector</h3>
+<p>Used in <code>include</code> and <code>exclude</code>. One of:</p>
+<div class="table-wrap"><table>
+<thead><tr><th>Form</th><th>Selects</th></tr></thead>
+<tbody>
+{%- for o in schema.selector.options %}
+<tr><td>{{ o.form | safe }}</td><td>{{ o.meaning | safe }}</td></tr>
+{%- endfor %}
+</tbody>
+</table></div>
+</section>
+
+{{ props(schema.property) }}

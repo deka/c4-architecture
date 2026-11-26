@@ -1,0 +1,6 @@
+#!/bin/sh
+# Refuse commits that credit Claude as a co-author.
+if grep -qiE '^co-authored-by:.*(claude|anthropic)' "$1"; then
+  echo "commit-msg: remove the 'Co-authored-by: Claude' trailer from the commit message." >&2
+  exit 1
+fi
