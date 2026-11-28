@@ -6,6 +6,8 @@
 
 *Agents read everything. Humans read what matters.*
 
+<img src="assets/social-preview.png" alt="C4 Architecture: context, container and component views of the same model" width="840">
+
 [Docs](https://deka.github.io/c4-architecture/) | [Tutorial](https://deka.github.io/c4-architecture/tutorial/) | [Schema](https://deka.github.io/c4-architecture/schema/) | [Examples](examples/)
 
 [![License: Apache 2.0](https://img.shields.io/badge/license-Apache%202.0-blue.svg)](LICENSE)
